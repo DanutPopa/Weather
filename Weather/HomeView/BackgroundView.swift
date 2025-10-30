@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct BackgroundView: View {
-    let topColor: Color
-    let bottomColor: Color
+    let isNight: Bool
     
     var body: some View {
-        LinearGradient(gradient: Gradient(colors: [topColor, bottomColor]),
+        LinearGradient(gradient: Gradient(colors: [isNight ? .black : .blue, isNight ? .gray : Color("lightBlue")]),
                        startPoint: .topLeading,
                        endPoint: .bottomTrailing)
             .ignoresSafeArea()
@@ -20,5 +19,5 @@ struct BackgroundView: View {
 }
 
 #Preview {
-    BackgroundView(topColor: .blue, bottomColor: Color("lightBlue"))
+    BackgroundView(isNight: false)
 }

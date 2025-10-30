@@ -14,7 +14,7 @@ struct MainWeatherStatusView: View {
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: imageName)
-                .renderingMode(.original)
+                .symbolRenderingMode(.multicolor)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 180, height: 180)

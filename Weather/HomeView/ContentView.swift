@@ -8,43 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isNight = false
+    
+    
     var body: some View {
         ZStack {
-            BackgroundView(topColor: .blue,
-                           bottomColor: Color("lightBlue"))
+            BackgroundView(isNight: isNight)
             VStack {
                 CityTextView(cityName: "Cupertino, CA")
                 
-                MainWeatherStatusView(imageName: "cloud.sun.fill",
+                MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
                                       temperature: 76)
                 .padding(.bottom, 40)
                 
                 HStack(spacing: 20) {
-                    WeatherDayView(dayOfWeek: "TUE",
-                                   imageName: "cloud.sun.fill",
-                                   temperature: 74)
-                    WeatherDayView(dayOfWeek: "WED",
-                                   imageName: "sun.max.fill",
-                                   temperature: 88)
-                    WeatherDayView(dayOfWeek: "THU",
-                                   imageName: "wind.snow",
-                                   temperature: 55)
-                    WeatherDayView(dayOfWeek: "FRI",
-                                   imageName: "sunset.fill",
-                                   temperature: 60)
-                    WeatherDayView(dayOfWeek: "SAT",
-                                   imageName: "snow",
-                                   temperature: 25)
+                    ForEach(Day.weatherDays, id: \.dayOfWeek) { day in
+                        WeatherDayView(day: day)
+                    }
                 }
                 
                 Spacer()
                 
                 Button {
-                    print("tapped")
+                    isNight.toggle()
                 } label: {
                     WeatherButton(title: "Change Day Time",
-                                  textColor: .blue,
-                                  backgroundColor: .white)
+                                  textColor: .white,
+                                  backgroundColor: .mint)
                 }
                 Spacer()
             }
