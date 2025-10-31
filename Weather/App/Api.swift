@@ -13,6 +13,39 @@ class Api {
     
     let apiKey = "6e4a0c1183758f9ceeef911bcdc88d31"
     
+    // MARK: - Fetch sample data using Generics
+    func fetchSample<T: Decodable>(_ type: T.Type, completion: @escaping (T?) -> Void) {
+        let resource = getResourceName(type)
+        guard let path = Bundle.main.path(forResource: resource, ofType: "json") else {
+            completion(nil)
+            return
+        }
+        let url = URL(filePath: path)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        do {
+            let data = try Data(contentsOf: url)
+            let decodedData = try decoder.decode(type, from: data)
+            completion(decodedData)
+        } catch {
+            print(error)
+            completion(nil)
+        }
+    }
+    
+    private func getResourceName<T>(_ type: T.Type) -> String {
+        return switch type {
+        case is CurrentWeather.Type:
+            "CurrentWeather"
+        case is WeatherForecast.Type:
+            "WeatherForecast"
+        default:
+            ""
+        }
+    }
+    
+    //MARK: - Fetch live data
+    
     func fetchCurrentWeather(for city: String) async throws -> CurrentWeather? {
         guard let location = try await fetchLocation(for: city),
               let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(location.lat)&lon=\(location.lon)&appid=\(apiKey)")
@@ -20,16 +53,16 @@ class Api {
             throw(URLError.init(.badURL))
         }
         do {
-             let (data, response) = try await URLSession.shared.data(from: url)
-             if let httpResponse = response as? HTTPURLResponse,
+            let (data, response) = try await URLSession.shared.data(from: url)
+            if let httpResponse = response as? HTTPURLResponse,
                httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 let decodedData = try decoder.decode(CurrentWeather.self, from: data)
                 return decodedData
-             } else {
-                 throw(URLError(.badServerResponse))
-             }
+            } else {
+                throw(URLError(.badServerResponse))
+            }
         } catch {
             print("Error decoding weather: \(error.localizedDescription)")
         }

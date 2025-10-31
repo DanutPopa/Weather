@@ -5,37 +5,37 @@
     },
     "weather": [
         {
-            "id": 803,
-            "main": "Clouds",
-            "description": "broken clouds",
-            "icon": "04n"
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d"
         }
     ],
     "base": "stations",
     "main": {
-        "temp": 285.38,
-        "feels_like": 284.09,
-        "temp_min": 285.38,
-        "temp_max": 285.38,
+        "temp": 21.41,
+        "feels_like": 20.89,
+        "temp_min": 21.41,
+        "temp_max": 21.41,
         "pressure": 1018,
-        "humidity": 55,
+        "humidity": 49,
         "sea_level": 1018,
         "grnd_level": 1009
     },
     "visibility": 10000,
     "wind": {
-        "speed": 1.39,
-        "deg": 270,
-        "gust": 1.38
+        "speed": 1.62,
+        "deg": 298,
+        "gust": 2.13
     },
     "clouds": {
-        "all": 59
+        "all": 4
     },
-    "dt": 1761847396,
+    "dt": 1761918299,
     "sys": {
         "country": "RO",
-        "sunrise": 1761800212,
-        "sunset": 1761837448
+        "sunrise": 1761886691,
+        "sunset": 1761923765
     },
     "timezone": 7200,
     "id": 679841,

@@ -9,34 +9,48 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isNight = false
-    
+    @State private var currentWeather: CurrentWeather?
     
     var body: some View {
         ZStack {
             BackgroundView(isNight: isNight)
-            VStack {
-                CityTextView(cityName: "Cupertino, CA")
-                
-                MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
-                                      temperature: 76)
-                .padding(.bottom, 40)
-                
-                HStack(spacing: 20) {
-                    ForEach(Day.weatherDays, id: \.dayOfWeek) { day in
-                        WeatherDayView(day: day)
+            
+            if let currentWeather {
+                VStack {
+                    CityTextView(cityName: currentWeather.name)
+                    
+                    MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
+                                          temperature: Int(currentWeather.main.temp))
+                    .padding(.bottom, 40)
+                    
+                    HStack(spacing: 20) {
+                        ForEach(Day.weatherDays, id: \.dayOfWeek) { day in
+                            WeatherDayView(day: day)
+                        }
                     }
+                    
+                    Spacer()
+                    
+                    Button {
+                        isNight.toggle()
+                    } label: {
+                        WeatherButton(title: "Change Day Time",
+                                      textColor: .white,
+                                      backgroundColor: .mint)
+                    }
+                    Spacer()
                 }
-                
-                Spacer()
-                
-                Button {
-                    isNight.toggle()
-                } label: {
-                    WeatherButton(title: "Change Day Time",
-                                  textColor: .white,
-                                  backgroundColor: .mint)
-                }
-                Spacer()
+            }
+            
+        }
+        .task {
+            Api.shared.fetchSample(CurrentWeather.self) { weather in
+                guard let weather else { return }
+                currentWeather = weather
+            }
+            Api.shared.fetchSample(WeatherForecast.self) { forecast in
+                guard let forecast else { return }
+                print(forecast)
             }
         }
     }
