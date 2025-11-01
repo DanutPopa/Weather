@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var isNight = false
     @State private var currentWeather: CurrentWeather?
+    @State private var weatherForecast: WeatherForecast?
     
     var body: some View {
         ZStack {
@@ -50,8 +51,12 @@ struct ContentView: View {
             }
             Api.shared.fetchSample(WeatherForecast.self) { forecast in
                 guard let forecast else { return }
-                print(forecast)
+                weatherForecast = forecast
             }
+//            Api.shared.fetchSample([SearchLocation].self) { locations in
+//                guard let locations else { return }
+//                print(locations)
+//            }
         }
     }
 }
