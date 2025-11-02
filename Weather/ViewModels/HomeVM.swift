@@ -8,7 +8,7 @@
 import Foundation
 
 @Observable class HomeVM {
-    var dailyForecast: [DailyForecast] = []
+    var dailyForecasts: [DailyForecast] = []
     var currentWeather: CurrentWeather?
     
     func fetchCurrentWeather() {
@@ -21,7 +21,7 @@ import Foundation
     func fetchWeatherForecast() {
         Api.shared.fetchSample(WeatherForecast.self) { [weak self] forecast in
             guard let self, let list = forecast?.list else { return }
-            dailyForecast = list.getDailyForecasts()
+            dailyForecasts = list.getDailyForecasts()
         }
     }
 }
