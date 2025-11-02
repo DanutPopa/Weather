@@ -7,16 +7,15 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct HomeView: View {
     @State private var isNight = false
-    @State private var currentWeather: CurrentWeather?
-    @State private var weatherForecast: WeatherForecast?
+    @State private var vm = HomeVM()
     
     var body: some View {
         ZStack {
             BackgroundView(isNight: isNight)
             
-            if let currentWeather {
+            if let currentWeather = vm.currentWeather {
                 VStack {
                     CityTextView(cityName: currentWeather.name)
                     
@@ -42,17 +41,11 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-            
         }
         .task {
-            Api.shared.fetchSample(CurrentWeather.self) { weather in
-                guard let weather else { return }
-                currentWeather = weather
-            }
-            Api.shared.fetchSample(WeatherForecast.self) { forecast in
-                guard let forecast else { return }
-                weatherForecast = forecast
-            }
+            vm.fetchCurrentWeather()
+            vm.fetchWeatherForecast()
+
 //            Api.shared.fetchSample([SearchLocation].self) { locations in
 //                guard let locations else { return }
 //                print(locations)
@@ -62,5 +55,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    HomeView()
 }
