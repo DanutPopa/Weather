@@ -8,22 +8,30 @@
 import SwiftUI
 
 struct WeatherDayView: View {
-    let day: Day
+    let dailyForecast: DailyForecast
+    let weatherType: WeatherType
+    
+    init(dailyForecast: DailyForecast, weatherType: WeatherType) {
+        self.dailyForecast = dailyForecast
+        self.weatherType = WeatherType(dailyForecast.description)
+    }
     
     var body: some View {
         VStack {
-            Text(day.dayOfWeek)
+            Text(dailyForecast.day)
                 .font(.headline)
                 .foregroundStyle(.white)
             
-            Image(systemName: day.imageName)
-                .symbolRenderingMode(.multicolor)
-                .resizable()
-                .foregroundStyle(.white)
-                .scaledToFit()
-                .frame(width: 40, height: 40)
+            if let image = weatherType.icon {
+                image
+                    .symbolRenderingMode(.multicolor)
+                    .resizable()
+                    .foregroundStyle(.white)
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+            }
             
-            Text("\(day.temperature)°")
+            Text("\(Int(dailyForecast.averageTemperature))°")
                 .font(.title)
                 .fontWeight(.medium)
                 .foregroundStyle(.white)
@@ -32,5 +40,5 @@ struct WeatherDayView: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    WeatherDayView(day: Day(dayOfWeek: "TUE", imageName: "sun.cloud.fill", temperature: 10))
+    WeatherDayView(dailyForecast: DailyForecast(day: "MON", description: "Clouds"), weatherType: .cloudy)
 }

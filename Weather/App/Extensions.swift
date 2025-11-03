@@ -50,7 +50,8 @@ extension [WeatherForecastList] {
     
     private func parse(using item: WeatherForecastList) -> DailyForecast {
         var dailyForecast = DailyForecast(day: item.dt.toDay(), description: item.weather.first?.main ?? "")
-        dailyForecast.temperatures.append(item.main.temp)
+        let temp = item.main.temp
+        dailyForecast.temperatures.append(temp)
         return dailyForecast
     }
 }

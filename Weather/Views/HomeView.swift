@@ -20,12 +20,15 @@ struct HomeView: View {
                     CityTextView(cityName: currentWeather.name)
                     
                     MainWeatherStatusView(imageName: isNight ? "moon.stars.fill" : "cloud.sun.fill",
-                                          temperature: Int(currentWeather.main.temp))
+                                          temperature: currentWeather.main.temp)
                     .padding(.bottom, 40)
                     
-                    HStack(spacing: 20) {
-                        ForEach(Day.weatherDays, id: \.dayOfWeek) { day in
-                            WeatherDayView(day: day)
+                    
+                    if let weatherType = vm.weatherType {
+                        HStack(spacing: 20) {
+                            ForEach(vm.dailyForecasts, id: \.day) { dailyForecast in
+                                WeatherDayView(dailyForecast: dailyForecast, weatherType: weatherType)
+                            }
                         }
                     }
                     
@@ -42,14 +45,9 @@ struct HomeView: View {
                 }
             }
         }
-        .task {
+        .onAppear {
             vm.fetchCurrentWeather()
             vm.fetchWeatherForecast()
-
-//            Api.shared.fetchSample([SearchLocation].self) { locations in
-//                guard let locations else { return }
-//                print(locations)
-//            }
         }
     }
 }

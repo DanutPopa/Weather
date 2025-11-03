@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainWeatherStatusView: View {
     let imageName: String
-    let temperature: Int
+    let temperature: Double
     
     var body: some View {
         VStack(spacing: 8) {
@@ -19,7 +19,7 @@ struct MainWeatherStatusView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 180, height: 180)
             
-            Text("\(temperature)°")
+            Text("\(Int(temperature))°")
                 .font(.system(size: 70, weight: .medium))
                 .foregroundStyle(.white)
         }
