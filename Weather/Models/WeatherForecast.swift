@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherForecast: Decodable {
+struct WeatherForecast: nonisolated Decodable {
     let cod: String
     let message: Int
     let cnt: Int

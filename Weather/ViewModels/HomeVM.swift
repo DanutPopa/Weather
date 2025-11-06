@@ -9,21 +9,24 @@ import Foundation
 
 @Observable class HomeVM {
     var dailyForecasts: [DailyForecast] = []
-    var currentWeather: CurrentWeather?
+    private var currentWeather: CurrentWeather?
+    var weatherForecast: WeatherForecast?
     var weatherType: WeatherType?
     
-    func fetchCurrentWeather() {
-        Api.shared.fetchSample(CurrentWeather.self) { [ weak self] weather in
-            guard let self, let weather else { return }
-            currentWeather = weather
+    func fetchWeather() async {
+        do {
+            let locations = try await Api.shared.fetchLocation(for: <#T##String#>)
+            guard let location = locations?.first else { return }
+            let (currentWeather, weatherForecast) = try await Api.shared.fetchWeather(lat: location.lat, lon: location.lon)
+            self.currentWeather = currentWeather
+            self.weatherForecast = weatherForecast
+        } catch {
+            print(error)
         }
     }
     
-    func fetchWeatherForecast() {
-        Api.shared.fetchSample(WeatherForecast.self) { [weak self] forecast in
-            guard let self, let list = forecast?.list else { return }
-            dailyForecasts = list.getDailyForecasts()
-            weatherType = WeatherType(dailyForecasts.description)
-        }
+    func getCurrentWeather() -> CurrentWeather? {
+        guard let currentWeather else { return nil }
+        return currentWeather
     }
 }
