@@ -15,7 +15,7 @@ struct HomeView: View {
         ZStack {
             BackgroundView(isNight: isNight)
             
-            if let currentWeather = vm.currentWeather {
+            if let currentWeather = vm.getCurrentWeather() {
                 VStack {
                     CityTextView(cityName: currentWeather.name)
                     
@@ -45,8 +45,8 @@ struct HomeView: View {
                 }
             }
         }
-        .onAppear {
-            vm.fetchWeather()
+        .task {
+            await vm.fetchWeather()
         }
     }
 }
