@@ -46,8 +46,7 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            vm.fetchCurrentWeather()
-            vm.fetchWeatherForecast()
+            vm.fetchWeather()
         }
     }
 }

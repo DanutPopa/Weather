@@ -12,18 +12,12 @@ import Foundation
     var currentWeather: CurrentWeather?
     var weatherType: WeatherType?
     
-    func fetchCurrentWeather() {
-        Api.shared.fetchSample(CurrentWeather.self) { [ weak self] weather in
-            guard let self, let weather else { return }
-            currentWeather = weather
-        }
-    }
-    
-    func fetchWeatherForecast() {
-        Api.shared.fetchSample(WeatherForecast.self) { [weak self] forecast in
-            guard let self, let list = forecast?.list else { return }
-            dailyForecasts = list.getDailyForecasts()
-            weatherType = WeatherType(dailyForecasts.description)
+    func fetchWeather() async {
+        do {
+           let locations = try await Api.shared.fetchLocation(for: <#T##String#>)
+           let (currentWeather, weatherForecast) = try await Api.shared.fetchWeather(lat: <#T##Double#>, lon: <#T##Double#>)
+        } catch {
+            print(error)
         }
     }
 }
